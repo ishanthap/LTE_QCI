@@ -2,187 +2,337 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>2018 Peugeot 3008 GT Line</title>
-    <link rel="stylesheet" href="style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LTE QCI Visualizer</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/animejs@3.2.1/lib/anime.min.js"></script>
+    <style>
+        @keyframes slideIn {
+            0% { transform: translateX(-100%); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+        .qci-row {
+            opacity: 0;
+        }
+        .scenario-card {
+            transition: all 0.3s ease;
+        }
+        .scenario-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        .priority-indicator {
+            width: 0;
+            transition: width 1.5s ease-out;
+        }
+    </style>
 </head>
-<body>
-<div class="container">
-    <h1>2018 Peugeot 3008 GT Line</h1>
+<body class="bg-gray-50 min-h-screen">
+    <div class="max-w-6xl mx-auto px-4 py-12">
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl font-bold text-blue-600 mb-4">LTE QCI Visualizer</h1>
+            <p class="text-xl text-gray-600">Understanding Quality of Service Classes in Mobile Networks</p>
+        </header>
 
-    <div class="carousel" id="carousel"></div>
+        <!-- Introduction Section -->
+        <section class="bg-white rounded-xl shadow-md p-6 mb-12">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-6 md:mb-0 md:pr-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">What is QCI?</h2>
+                    <p class="text-gray-600 mb-4">
+                        QoS Class Identifier (QCI) is a mechanism used in LTE networks to ensure proper Quality of Service
+                        for different types of traffic. Each QCI has specific characteristics that determine how network
+                        resources are allocated.
+                    </p>
+                    <button id="startAnimation" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300">
+                        Start Visualization
+                    </button>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="http://static.photos/technology/640x360/42" alt="LTE Network" class="rounded-lg shadow-sm w-full">
+                </div>
+            </div>
+        </section>
 
-    <div class="tabs">
-        <button class="tab-button active" data-tab="overview">Overview</button>
-        <button class="tab-button" data-tab="features">Features</button>
-        <button class="tab-button" data-tab="specs">Specifications</button>
+        <!-- QCI Table Section -->
+        <section class="mb-16">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">QCI Characteristics</h2>
+            <div class="overflow-x-auto bg-white rounded-xl shadow-md">
+                <table class="min-w-full divide-y divide-gray-200">
+                    <thead class="bg-gray-100">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">QCI</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Resource Type</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Priority</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Packet Delay Budget</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Packet Loss Rate</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Example Services</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <!-- QCI 1 -->
+                        <tr class="qci-row" id="qci1">
+                            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-blue-600">1</td>
+                            <td class="px-6 py-4 whitespace-nowrap">GBR</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="priority-indicator h-4 bg-red-500 rounded-full" style="max-width: 100px;"></div>
+                                    <span class="ml-2">2</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">100 ms</td>
+                            <td class="px-6 py-4 whitespace-nowrap">10⁻²</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Conversational Voice</td>
+                        </tr>
+                        <!-- QCI 2 -->
+                        <tr class="qci-row" id="qci2">
+                            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-blue-600">2</td>
+                            <td class="px-6 py-4 whitespace-nowrap">GBR</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="priority-indicator h-4 bg-orange-500 rounded-full" style="max-width: 100px;"></div>
+                                    <span class="ml-2">4</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">150 ms</td>
+                            <td class="px-6 py-4 whitespace-nowrap">10⁻³</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Conversational Video</td>
+                        </tr>
+                        <!-- QCI 3 -->
+                        <tr class="qci-row" id="qci3">
+                            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-blue-600">3</td>
+                            <td class="px-6 py-4 whitespace-nowrap">GBR</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="priority-indicator h-4 bg-yellow-500 rounded-full" style="max-width: 100px;"></div>
+                                    <span class="ml-2">3</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">50 ms</td>
+                            <td class="px-6 py-4 whitespace-nowrap">10⁻³</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Real-time Gaming</td>
+                        </tr>
+                        <!-- QCI 4 -->
+                        <tr class="qci-row" id="qci4">
+                            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-blue-600">4</td>
+                            <td class="px-6 py-4 whitespace-nowrap">GBR</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="priority-indicator h-4 bg-green-500 rounded-full" style="max-width: 100px;"></div>
+                                    <span class="ml-2">5</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">300 ms</td>
+                            <td class="px-6 py-4 whitespace-nowrap">10⁻⁶</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Buffered Streaming</td>
+                        </tr>
+                        <!-- QCI 5 -->
+                        <tr class="qci-row" id="qci5">
+                            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-blue-600">5</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Non-GBR</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="priority-indicator h-4 bg-blue-500 rounded-full" style="max-width: 100px;"></div>
+                                    <span class="ml-2">1</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">100 ms</td>
+                            <td class="px-6 py-4 whitespace-nowrap">10⁻⁶</td>
+                            <td class="px-6 py-4 whitespace-nowrap">IMS Signaling</td>
+                        </tr>
+                        <!-- QCI 6 -->
+                        <tr class="qci-row" id="qci6">
+                            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-blue-600">6</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Non-GBR</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="priority-indicator h-4 bg-indigo-500 rounded-full" style="max-width: 100px;"></div>
+                                    <span class="ml-2">6</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">300 ms</td>
+                            <td class="px-6 py-4 whitespace-nowrap">10⁻⁶</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Video, TCP-based</td>
+                        </tr>
+                        <!-- QCI 7 -->
+                        <tr class="qci-row" id="qci7">
+                            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-blue-600">7</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Non-GBR</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="priority-indicator h-4 bg-purple-500 rounded-full" style="max-width: 100px;"></div>
+                                    <span class="ml-2">7</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">100 ms</td>
+                            <td class="px-6 py-4 whitespace-nowrap">10⁻³</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Voice, Video, Interactive Gaming</td>
+                        </tr>
+                        <!-- QCI 8 -->
+                        <tr class="qci-row" id="qci8">
+                            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-blue-600">8</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Non-GBR</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="priority-indicator h-4 bg-pink-500 rounded-full" style="max-width: 100px;"></div>
+                                    <span class="ml-2">8</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">300 ms</td>
+                            <td class="px-6 py-4 whitespace-nowrap">10⁻⁶</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Video, TCP-based</td>
+                        </tr>
+                        <!-- QCI 9 -->
+                        <tr class="qci-row" id="qci9">
+                            <td class="px-6 py-4 whitespace-nowrap text-lg font-bold text-blue-600">9</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Non-GBR</td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="flex items-center">
+                                    <div class="priority-indicator h-4 bg-gray-500 rounded-full" style="max-width: 100px;"></div>
+                                    <span class="ml-2">9</span>
+                                </div>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">300 ms</td>
+                            <td class="px-6 py-4 whitespace-nowrap">10⁻⁶</td>
+                            <td class="px-6 py-4 whitespace-nowrap">Default Bearer</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Real-world Scenarios -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">Real-world Application Scenarios</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Scenario 1 -->
+                <div class="scenario-card bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-red-100 p-3 rounded-full mr-4">
+                            <i data-feather="phone" class="text-red-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold">VoLTE Call</h3>
+                    </div>
+                    <p class="text-gray-600 mb-3">Uses QCI 1 for voice data with guaranteed bit rate and low latency.</p>
+                    <div class="bg-red-500 text-white text-xs font-medium px-2 py-1 rounded-full inline-block">QCI 1</div>
+                </div>
+                <!-- Scenario 2 -->
+                <div class="scenario-card bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-blue-100 p-3 rounded-full mr-4">
+                            <i data-feather="video" class="text-blue-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold">Video Streaming</h3>
+                    </div>
+                    <p class="text-gray-600 mb-3">Uses QCI 4 for buffered video with moderate delay tolerance.</p>
+                    <div class="bg-green-500 text-white text-xs font-medium px-2 py-1 rounded-full inline-block">QCI 4</div>
+                </div>
+                <!-- Scenario 3 -->
+                <div class="scenario-card bg-white rounded-xl shadow-md p-6">
+                    <div class="flex items-center mb-4">
+                        <div class="bg-purple-100 p-3 rounded-full mr-4">
+                            <i data-feather="globe" class="text-purple-600"></i>
+                        </div>
+                        <h3 class="text-lg font-semibold">Web Browsing</h3>
+                    </div>
+                    <p class="text-gray-600 mb-3">Uses QCI 9 as default bearer for best-effort traffic.</p>
+                    <div class="bg-gray-500 text-white text-xs font-medium px-2 py-1 rounded-full inline-block">QCI 9</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Network Diagram -->
+        <section class="bg-white rounded-xl shadow-md p-6 mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">QCI in Network Architecture</h2>
+            <div class="relative h-64 md:h-96 bg-gray-100 rounded-lg overflow-hidden">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <img src="http://static.photos/technology/1024x576/10" alt="Network Diagram" class="w-full h-full object-cover opacity-30">
+                </div>
+                <div class="relative z-10 p-6 grid grid-cols-1 md:grid-cols-3 gap-6 h-full">
+                    <!-- UE -->
+                    <div class="bg-blue-100 bg-opacity-80 p-4 rounded-lg flex flex-col items-center justify-center">
+                        <i data-feather="smartphone" class="text-blue-600 w-8 h-8 mb-2"></i>
+                        <h3 class="font-semibold text-blue-800">User Equipment</h3>
+                        <p class="text-sm text-center text-blue-700 mt-2">Initiates QCI requests based on application needs</p>
+                    </div>
+                    <!-- eNodeB -->
+                    <div class="bg-green-100 bg-opacity-80 p-4 rounded-lg flex flex-col items-center justify-center">
+                        <i data-feather="hard-drive" class="text-green-600 w-8 h-8 mb-2"></i>
+                        <h3 class="font-semibold text-green-800">eNodeB</h3>
+                        <p class="text-sm text-center text-green-700 mt-2">Implements QCI-based scheduling and prioritization</p>
+                    </div>
+                    <!-- Core Network -->
+                    <div class="bg-purple-100 bg-opacity-80 p-4 rounded-lg flex flex-col items-center justify-center">
+                        <i data-feather="server" class="text-purple-600 w-8 h-8 mb-2"></i>
+                        <h3 class="font-semibold text-purple-800">Core Network</h3>
+                        <p class="text-sm text-center text-purple-700 mt-2">Manages QCI policies and resource allocation</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-gray-500 text-sm">
+            <p>© 2023 LTE QCI Visualizer | For mobile network operators and engineers</p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#" class="text-blue-600 hover:text-blue-800"><i data-feather="linkedin"></i></a>
+                <a href="#" class="text-blue-400 hover:text-blue-600"><i data-feather="twitter"></i></a>
+                <a href="#" class="text-gray-700 hover:text-gray-900"><i data-feather="github"></i></a>
+            </div>
+        </footer>
     </div>
 
-    <div class="tab-content" id="overview">
-        <h2>Overview</h2>
-        <p>The French Red Peugeot 3008 GT Line European Pearl White Two Tone SUV.</p>
-		<p>Used by an Engineer and CarMart Brand New imported & maintained </p>
-		<p style="color: red;">Sold to another Peugeot Lover who's also an Engineer! </p>
-        <ul>
-            <li>Price: 17M </li>
-		<li>Contact No 1: 071-5364410 (Direct or Whatsapp)</li>
-            <!-- <li>Contact No 2: 070-3473336 (Direct)</li> -->
-            <li>Location: Kadawatha</li>
-            <li>Transmission: 6-speed automatic</li>
-            <li>Engine: 1.2L Turbo Petrol</li>
-			<li>Previous Owners (Doctor & Engineer)</li>
-			<li>Mileage: 100k</li>
-        </ul>
-    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+            
+            document.getElementById('startAnimation').addEventListener('click', function() {
+                // Animate table rows
+                const qciRows = document.querySelectorAll('.qci-row');
+                qciRows.forEach((row, index) => {
+                    anime({
+                        targets: row,
+                        translateX: ['-100%', '0%'],
+                        opacity: [0, 1],
+                        duration: 800,
+                        delay: index * 150,
+                        easing: 'easeOutExpo'
+                    });
+                });
 
-   <div class="tab-content hidden" id="features">
-    <h2>🚗 Features</h2>
+                // Animate priority indicators
+                const indicators = document.querySelectorAll('.priority-indicator');
+                indicators.forEach(indicator => {
+                    const priority = parseInt(indicator.nextElementSibling.textContent);
+                    const widthPercentage = (10 - priority) * 10; // Invert priority for visual effect
+                    
+                    // Reset before animating
+                    indicator.style.width = '0';
+                    
+                    anime({
+                        targets: indicator,
+                        width: `${widthPercentage}px`,
+                        duration: 1000,
+                        easing: 'easeOutExpo',
+                        delay: 1000
+                    });
+                });
 
-    <h3>🎧 Audio, Visual & Communication</h3>
-    <ul>
-        <li>10-inch HD touchscreen infotainment display</li>
-        <li>12.3-inch Peugeot i-Cockpit digital instrument panel</li>
-        <li>Android Auto & Apple CarPlay</li>
-        <li>Wireless charging</li>
-        <li>Voice recognition</li>
-        <li>Driver communication LED display (aftermarket)</li>
-        <li>Front & rear FHD dash camera (aftermarket)</li>
-        <li>Wireless Android Auto (aftermarket)</li>
-        <li>Sunglass holder (aftermarket)</li>
-	 <li><a href="https://youtu.be/0omLmhVmwqQ" target="_blank">🎥 Video of Infotainment System</a></li>
-	    </ul>
-
-    <h3>🛡️ Safety & Security</h3>
-    <ul>
-        <li>8 Airbags(driver, passenger, knee, front seats, windscreen, curtain & side)</li>
-        <li>Lane departure warning</li>
-        <li>Driver attention detection</li>
-        <li>Speed zone reminder (road sign recognition)</li>
-        <li>Speed limiter</li>
-        <li>Front & rear park distance sensors</li>
-        <li>Automatic parking with steering assist</li>
-        <li>360° Viso Park camera</li>
-        <li>Auto-dipping side mirrors (reversing)</li>
-        <li>Tyre pressure sensors</li>
-        <li>Electric park brake</li>
-        <li>Hazard triangle</li>
-        <li>Tyre pressure monitoring (aftermarket)</li>
-        <li>Foam fire extinguisher (2026/03) (aftermarket)</li>
-    </ul>
-
-    <h3>💺 Comfort & Convenience</h3>
-    <ul>
-        <li>Panoramic dual electric sunroof</li>
-        <li>Driver massaging seat</li>
-        <li>Driver electric seat with 3 memories</li>
-        <li>Driver & passenger seat heating</li>
-        <li>Hands-free power tailgate</li>
-        <li>Remote window open/close via key</li>
-        <li>Boot auto sensor light (aftermarket)</li>
-        <li>Entry/exit fade lighting</li>
-        <li>Front privacy windows (aftermarket)</li>
-    </ul>
-
-    <h3>💡 Lights & Windows</h3>
-    <ul>
-        <li>Full LED headlights with auto-tilt</li>
-        <li>LED Daytime Running Lights (DRL)</li>
-        <li>LED fog lamps – front & rear</li>
-        <li>Door mirrors with puddle lights</li>
-        <li>All power windows with auto up/down</li>
-        <li>Electric anti-glare mirrors</li>
-        <li>Rain-sensing auto wipers</li>
-        <li>Rain-X water repellent coating (aftermarket)</li>
-    </ul>
-
-    <h3>🛋️ Interior</h3>
-    <ul>
-        <li>Nappa diamond-stitched leather seats</li>
-        <li>Ambient lighting</li>
-        <li>Footwell lamps both front & rear)</li>
-        <li>Map & reading lamps</li>
-        <li>12V Cigar sockets (03) – front, rear & boot</li>
-        <li>230V UK socket – rear</li>
-    </ul>
-
-    <h3>🪑 Seating</h3>
-    <ul>
-        <li>Heated front seats</li>
-        <li>Driver massaging seat</li>
-        <li>Driver memory seat (electric)</li>
-        <li>Drivers Back Seat cooling fan 3 modes (aftermarket)</li>
-    </ul>
-
-    <h3>🧭 Instruments & Controls</h3>
-    <ul>
-        <li>12.3-inch digital i-Cockpit</li>
-        <li>Speed zone recognition</li>
-        <li>Speed limiter</li>
-        <li>Gear shift paddles</li>
-        <li>Multi-function steering wheel</li>
-        <li>Start–Stop engine</li>
-        <li>My Peugeot app support</li>
-    </ul>
-
-    <h3>🧱 Exterior</h3>
-    <ul>
-        <li>Two-tone Pearl White & Black</li>
-        <li>Red Line roof rails (aftermarket)</li>
-        <li>Scuff plates</li>
-        <li>Genuine mud flaps (aftermarket)</li>
-        <li>Full body nano coating (aftermarket)</li>
-    </ul>
-
-    <h3>🚘 Body</h3>
-    <ul>
-        <li>SUV with panoramic glass roof</li>
-        <li>Hands-free powered tailgate</li>
-    </ul>
-
-    <h3>🔌 Electrical</h3>
-    <ul>
-        <li>Start–Stop system</li>
-        <li>Electric park brake</li>
-        <li>Auto-dip mirrors</li>
-        <li>Electric windows & mirrors</li>
-        <li>Rain sensor</li>
-        <li>Boot lighting sensor (aftermarket)</li>
-        <li>12V & 230V power outlets</li>
-        <li>New EFB 12V battery (2025/02 warranty)</li>
-    </ul>
-		
-</div>
-<div class="tab-content hidden" id="specs">
-    <h2>📊 Specifications</h2>
-
-    <h3>⚙️ Transmission & Drivetrain</h3>
-    <table>
-        <tr><th>Transmission</th><td>6-speed Automatic</td></tr>
-        <tr><th>Drivetrain</th><td>Front-Wheel Drive (FWD)</td></tr>
-    </table>
-
-    <h3>🔄 Steering</h3>
-    <table>
-        <tr><th>Type</th><td>Electric Power Steering</td></tr>
-        <tr><th>Features</th><td>Gear Shift Paddles, Auto Park Assist, Multi-function Wheel</td></tr>
-    </table>
-
-    <h3>🛑 Brakes</h3>
-    <table>
-        <tr><th>Type</th><td>Electric Park Brake, ABS, EBD</td></tr>
-        <tr><th>Emergency Brake</th><td>Autonomous Emergency Braking (AEB)</td></tr>
-    </table>
-
-    <h3>🛞 Wheels & Tyres</h3>
-    <table>
-        <tr><th>Wheels</th><td>18" Los Angeles black & silver alloys</td></tr>
-        <tr><th>Tyres</th><td>New Japan Dunlop (fitted 2024/09)</td></tr>
-        <tr><th>Spare</th><td>18" spare + tyre removal kit</td></tr>
-        <tr><th>Monitoring</th><td>Aftermarket TPMS sensors</td></tr>
-    </table>
-</div>
-
-</div>
-
-<script src="script.js"></script>
+                // Animate scenario cards
+                anime({
+                    targets: '.scenario-card',
+                    translateY: [20, 0],
+                    opacity: [0, 1],
+                    duration: 800,
+                    delay: anime.stagger(200),
+                    easing: 'easeOutExpo'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
