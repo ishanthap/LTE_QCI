@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LTE QCI Visualizer</title>
-    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/feather-icons"></script>
     <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
@@ -14,51 +14,83 @@
             0% { transform: translateX(-100%); opacity: 0; }
             100% { transform: translateX(0); opacity: 1; }
         }
-        .qci-row {
-            opacity: 0;
-        }
-        .scenario-card {
-            transition: all 0.3s ease;
-        }
+        .qci-row { opacity: 0; }
+        .scenario-card { transition: all 0.3s ease; }
         .scenario-card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
         }
-        .priority-indicator {
-            width: 0;
-            transition: width 1.5s ease-out;
-        }
+        .priority-indicator { width: 0; transition: width 1.5s ease-out; }
     </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
     <div class="max-w-6xl mx-auto px-4 py-12">
-        <!-- Header -->
+        <!-- Main Header -->
         <header class="text-center mb-12">
             <h1 class="text-4xl font-bold text-blue-600 mb-4">LTE QCI Visualizer</h1>
-            <p class="text-xl text-gray-600">Understanding Quality of Service Classes in Mobile Networks</p>
+            <p class="text-xl text-gray-600">Understanding QoS & QCI for a Smarter Mobile Experience</p>
         </header>
 
-        <!-- Introduction Section -->
-        <section class="bg-white rounded-xl shadow-md p-6 mb-12">
-            <div class="flex flex-col md:flex-row items-center">
-                <div class="md:w-1/2 mb-6 md:mb-0 md:pr-8">
-                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">What is QCI?</h2>
-                    <p class="text-gray-600 mb-4">
-                        QoS Class Identifier (QCI) is a mechanism used in LTE networks to ensure proper Quality of Service
-                        for different types of traffic. Each QCI has specific characteristics that determine how network
-                        resources are allocated.
-                    </p>
-                    <button id="startAnimation" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300">
-                        Start Visualization
-                    </button>
+        <!-- New Intro Content -->
+        <section class="bg-white rounded-xl shadow-md p-8 mb-12">
+            <h2 class="text-3xl font-bold text-gray-900 mb-4">Beyond Bars: How Our Smart Network Guarantees Your Best Mobile Experience</h2>
+            <p class="text-gray-700 mb-4">You've seen the signal bars, but the real magic lies in QoS and QCI—the invisible traffic managers of our network that prioritize your connection for a flawless experience.</p>
+            <p class="text-gray-700 mb-4">We've all been there: a crucial video call that freezes, a game that lags at the final moment, or a song that buffers during your morning run. It feels random—but it doesn't have to be.</p>
+            <p class="text-gray-700 mb-4">At <strong>[Your Mobile Operator]</strong>, we use advanced network technology called QoS (Quality of Service) and QCI (QoS Class Identifier) to actively manage data traffic. Think of it as a smart, multi-lane superhighway for your data, ensuring the most important packets always get the green light.</p>
+        </section>
+
+        <!-- Analogy Section -->
+        <section class="bg-white rounded-xl shadow-md p-8 mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-4">The Data Superhighway Analogy</h2>
+            <p class="text-gray-700 mb-4">Imagine your mobile data is a single-lane road. When it's busy, everything—from an ambulance to a grocery truck—gets stuck in the same jam. This is a basic network without QoS.</p>
+            <p class="text-gray-700 mb-4">Now imagine a smart superhighway with dedicated lanes:</p>
+            <ul class="list-disc ml-6 text-gray-700 mb-4">
+                <li>The Priority Lane: for voice and critical video calls</li>
+                <li>The Express Lane: for real-time gaming</li>
+                <li>The Standard Lane: for browsing & social media</li>
+                <li>The Background Lane: for large updates and downloads</li>
+            </ul>
+            <p class="text-gray-700">QCI assigns each traffic type to its correct lane. QoS enforces the rules—making sure a “truck” never blocks an “ambulance.”</p>
+        </section>
+
+        <!-- QCI Explanation Section -->
+        <section class="bg-white rounded-xl shadow-md p-8 mb-12">
+            <h2 class="text-2xl font-semibold text-gray-800 mb-6">What This Means for You</h2>
+
+            <div class="space-y-6">
+                <div>
+                    <h3 class="text-xl font-bold text-blue-600">1. Flawless Conversational Services (QCI 1)</h3>
+                    <p class="text-gray-700">Voice & video calls get the highest priority—smooth, real-time, and uninterrupted.</p>
                 </div>
-                <div class="md:w-1/2">
-                    <img src="http://static.photos/technology/640x360/42" alt="LTE Network" class="rounded-lg shadow-sm w-full">
+                <div>
+                    <h3 class="text-xl font-bold text-blue-600">2. Real-Time Gaming & AR/VR (QCI 3)</h3>
+                    <p class="text-gray-700">Low latency ensures instant response for cloud gaming and immersive apps.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-blue-600">3. High-Quality Streaming (QCI 6-7)</h3>
+                    <p class="text-gray-700">Your favorite shows and music stream smoothly—even during peak hours.</p>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold text-blue-600">4. Browsing & Messaging (QCI 8-9)</h3>
+                    <p class="text-gray-700">Fast, reliable loading for everyday apps with best‑effort traffic handling.</p>
                 </div>
             </div>
         </section>
 
-        <!-- QCI Table Section -->
+        <!-- Existing Introduction -->
+        <section class="bg-white rounded-xl shadow-md p-6 mb-12">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-6 md:mb-0 md:pr-8">
+                    <h2 class="text-2xl font-semibold text-gray-800 mb-4">What is QCI?</h2>
+                    <p class="text-gray-600 mb-4">QoS Class Identifier (QCI) ensures proper Quality of Service for different types of traffic in LTE. Each QCI defines how the network allocates resources.</p>
+                    <button id="startAnimation" class="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-lg transition duration-300">Start Visualization</button>
+                </div>
+                <div class="md:w-1/2">
+                    <img src="http://static.photos/technology/640x360/42" alt="LTE Network" class="rounded-lg shadow-sm w-full" />
+                </div>
+            </div>
+        </section>
+
         <section class="mb-16">
             <h2 class="text-2xl font-semibold text-gray-800 mb-6 text-center">QCI Characteristics</h2>
             <div class="overflow-x-auto bg-white rounded-xl shadow-md">
@@ -275,6 +307,14 @@
             </div>
         </section>
 
+        <!-- Conclusion Section -->
+        <section class="bg-white rounded-xl shadow-md p-8 mb-12">
+            <h2 class="text-2xl font-semibold text-gray-900 mb-4">Why It Matters</h2>
+            <p class="text-gray-700 mb-4">Not all networks are created equal. A sophisticated QoS and QCI framework ensures reliability, speed, and intelligent traffic handling.</p>
+            <p class="text-gray-700 mb-4">When you choose <strong>[Your Mobile Operator]</strong>, you're choosing a network that prioritizes what truly matters—your live conversations, your entertainment, your connection to the world.</p>
+            <p class="font-semibold text-gray-900">Experience the difference of a smarter network.</p>
+        </section>
+
         <!-- Footer -->
         <footer class="text-center text-gray-500 text-sm">
             <p>© 2023 LTE QCI Visualizer | For mobile network operators and engineers</p>
@@ -285,54 +325,5 @@
             </div>
         </footer>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            feather.replace();
-            
-            document.getElementById('startAnimation').addEventListener('click', function() {
-                // Animate table rows
-                const qciRows = document.querySelectorAll('.qci-row');
-                qciRows.forEach((row, index) => {
-                    anime({
-                        targets: row,
-                        translateX: ['-100%', '0%'],
-                        opacity: [0, 1],
-                        duration: 800,
-                        delay: index * 150,
-                        easing: 'easeOutExpo'
-                    });
-                });
-
-                // Animate priority indicators
-                const indicators = document.querySelectorAll('.priority-indicator');
-                indicators.forEach(indicator => {
-                    const priority = parseInt(indicator.nextElementSibling.textContent);
-                    const widthPercentage = (10 - priority) * 10; // Invert priority for visual effect
-                    
-                    // Reset before animating
-                    indicator.style.width = '0';
-                    
-                    anime({
-                        targets: indicator,
-                        width: `${widthPercentage}px`,
-                        duration: 1000,
-                        easing: 'easeOutExpo',
-                        delay: 1000
-                    });
-                });
-
-                // Animate scenario cards
-                anime({
-                    targets: '.scenario-card',
-                    translateY: [20, 0],
-                    opacity: [0, 1],
-                    duration: 800,
-                    delay: anime.stagger(200),
-                    easing: 'easeOutExpo'
-                });
-            });
-        });
-    </script>
 </body>
 </html>
