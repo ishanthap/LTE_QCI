@@ -325,5 +325,54 @@
             </div>
         </footer>
     </div>
+	<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            feather.replace();
+            
+            document.getElementById('startAnimation').addEventListener('click', function() {
+                // Animate table rows
+                const qciRows = document.querySelectorAll('.qci-row');
+                qciRows.forEach((row, index) => {
+                    anime({
+                        targets: row,
+                        translateX: ['-100%', '0%'],
+                        opacity: [0, 1],
+                        duration: 800,
+                        delay: index * 150,
+                        easing: 'easeOutExpo'
+                    });
+                });
+
+                // Animate priority indicators
+                const indicators = document.querySelectorAll('.priority-indicator');
+                indicators.forEach(indicator => {
+                    const priority = parseInt(indicator.nextElementSibling.textContent);
+                    const widthPercentage = (10 - priority) * 10; // Invert priority for visual effect
+                    
+                    // Reset before animating
+                    indicator.style.width = '0';
+                    
+                    anime({
+                        targets: indicator,
+                        width: `${widthPercentage}px`,
+                        duration: 1000,
+                        easing: 'easeOutExpo',
+                        delay: 1000
+                    });
+                });
+
+                // Animate scenario cards
+                anime({
+                    targets: '.scenario-card',
+                    translateY: [20, 0],
+                    opacity: [0, 1],
+                    duration: 800,
+                    delay: anime.stagger(200),
+                    easing: 'easeOutExpo'
+                });
+            });
+        });
+    </script>
+	
 </body>
 </html>
